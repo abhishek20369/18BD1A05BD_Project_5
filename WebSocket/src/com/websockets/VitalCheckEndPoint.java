@@ -22,12 +22,14 @@ public class VitalCheckEndPoint {
 	public void handleMessage(String message, Session userSession) {
 		String username = (String) userSession.getUserProperties().get("username");
 		if (username != null && !username.equals("doctor")) {
-			//System.out.println(message+"hi");
 			subscribers.stream().forEach(x -> {
 				try {
 					if (x.getUserProperties().get("username").equals("doctor")) {
 						String[] vals=message.split(",");
-						if(Integer.parseInt(vals[0])< 90) {
+						for(String a:vals) {
+							System.out.println(a);
+						}
+						if(Integer.parseInt(vals[0])< 90 || Integer.parseInt(vals[1])>98 || Integer.parseInt(vals[3])>90) {
 							x.getBasicRemote().sendText(buildJSON(username, message));
 						}
 					}
